@@ -33,7 +33,7 @@ app.get("/", helloWorld);
 
 app.post("/", (request, response) => {
   response.status(200);
-  response.send("Hello from POST");
+  response.send("Hello POST");
 });
 
 app.use(userRouter);
