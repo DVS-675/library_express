@@ -26,7 +26,7 @@ const getBook = (request, response) => {
 
 const updateBook = (request, response) => {
   const { book_id } = request.params;
-  return Book.findByIdAndUpdate(book_id, { ...request.body })
+  return Book.findByIdAndUpdate(book_id, { ...request.body }, { new: true })
     .then((book) => {
       response.status(200).send(book);
     })

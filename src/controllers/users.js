@@ -27,7 +27,7 @@ const createUser = (request, response) => {
 
 const updateUser = (request, response) => {
   const { user_id } = request.params;
-  return User.findByIdAndUpdate(user_id, { ...request.body })
+  return User.findByIdAndUpdate(user_id, { ...request.body }, { new: true })
     .then((user) => {
       response.status(200).send(user);
     })
@@ -43,10 +43,40 @@ const deleteUser = (request, response) => {
     .catch((e) => response.status(500).send(e.message));
 };
 
+const takeBook = (request, response) => {
+  const { user_id } = request.params;
+  const { book_id } = request.params;
+  return User.findByIdAndUpdate(
+    user_id,
+    { $addToSet: { books: book_id } },
+    { new: true, runValidators: true }
+  )
+    .then((user) => {
+      response.status(200).send("Success");
+    })
+    .catch((e) => response.status(500).send(e.message));
+};
+
+const returnBook = (request, response) => {
+  const { user_id } = request.params;
+  const { book_id } = request.params;
+  return User.findByIdAndUpdate(
+    user_id,
+    { $pullAll: { books: [{ _id: book_id }] } },
+    { new: true, runValidators: true }
+  )
+    .then((user) => {
+      response.status(200).send("Success");
+    })
+    .catch((e) => response.status(500).send(e.message));
+};
+
 module.exports = {
   getUsers,
   getUser,
   createUser,
   updateUser,
   deleteUser,
+  takeBook,
+  returnBook,
 };
